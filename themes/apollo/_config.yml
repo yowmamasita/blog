@@ -1,8 +1,7 @@
 menu:
     Blog: /
     Archive: /archives/
-    Weibo: http://weibo.com/sunchongsheng
-    GitHub: https://github.com/pinggod
+    Weibo: https://bensarmiento.com
     Rss: /atom.xml
 
 favicon: /favicon.png
@@ -10,17 +9,17 @@ logo: /favicon.png
 
 # Comment
 # e.g disqus: seansun
-disqus:
+disqus: 
 duoshuo: 
 
 # Analytics
 # google-analytics:
-ga: UA-65933410-1
+ga: UA-80507391-2
 
 # Copyright Infomation
-startyear: 2015
+startyear: 2016
 
 # Font CDN
 #true : use google fonts api, not stable for chinese visitor sometimes, caused by force majeure factor
 #false: use useso fonts api instead of google's, great response speed for chinese visitor
-googlefonts: false
+googlefonts: true
