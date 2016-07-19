@@ -2,6 +2,13 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://blog.bensarmiento.com/2016/07/19/Deploying-an-Elixir-app-to-Google-App-Engine/</loc>
+    
+    <lastmod>2016-07-19T07:04:29.139Z</lastmod>
+    
+  </url>
+  
+  <url>
     <loc>https://blog.bensarmiento.com/2016/07/11/IPTV-is-the-Answer/</loc>
     
     <lastmod>2016-07-11T05:05:56.087Z</lastmod>
