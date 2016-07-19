@@ -26,7 +26,7 @@ Once done, we can start creating Phoenix projects. For our purpose, let's just c
 
 `mix phoenix.new gaetest --no-brunch --no-ecto`
 
-This command will setup a Phoenix project in **gaetest**. You can run `mix phoenix.server` inside that directory to run your app.
+This command will setup a Phoenix project in **gaetest**. You can run `mix phoenix.server` inside that directory to run your app. In some cases, you may also need to install [Node](https://nodejs.org/).
 
 We have to make some config updates to our Phoenix project so we can run it inside GAE. First, add [exrm](https://github.com/bitwalker/exrm) as a dependency. Open `mix.exs` and add this:
 
@@ -34,7 +34,6 @@ We have to make some config updates to our Phoenix project so we can run it insi
 defp deps do
   [{:phoenix, "~> 1.2.0"},
    ...
-   
    {:exrm, "~> 1.0.8"}]
 end
 ```
@@ -49,18 +48,7 @@ config :gaetest, Gaetest.Endpoint,
   server: true
 ```
 
-Now, we need to build a release. Run these commands to do that:
-
-```
-mix do deps.get, compile
-MIX_ENV=prod mix phoenix.digest
-MIX_ENV=prod mix compile
-MIX_ENV=prod mix release
-```
-
-Next time, all we need to do is run `MIX_ENV=prod mix do phoenix.digest, compile, release` to make a new release.
-
-Then, onto our GAE setup, we'll be using a [custom runtime](https://cloud.google.com/appengine/docs/flexible/custom-runtimes/) as Elixir is not natively supported. We need to install [Cloud SDK](https://cloud.google.com/sdk/) and [Docker](https://www.docker.com/) for this. Run `gcloud init` if this is your first time installing Cloud SDK. To make sure everything is ready, run [*gcloud preview app --help*](https://cloud.google.com/sdk/gcloud/reference/preview/app/) and *docker -v*.
+Then, onto our GAE setup, we'll be using a [custom runtime](https://cloud.google.com/appengine/docs/flexible/custom-runtimes/) as Elixir is not natively supported. We need to install [Cloud SDK](https://cloud.google.com/sdk/) and [Docker](https://www.docker.com/) for this. Run `gcloud init` if this is your first time installing Cloud SDK. To make sure everything is ready, run [*gcloud app --help*](https://cloud.google.com/sdk/gcloud/reference/preview/app/) and *docker -v*.
 
 Inside the **gaetest** directory, create *app.yaml* to configure our project to use a custom runtime:
 
@@ -71,7 +59,7 @@ runtime: custom
 vm: true
 ```
 
-Next, we'll create a *Dockerfile* to describe how to run our app inside GAE:
+Next, we'll create a *Dockerfile* to describe how to run our app inside GAE. We need to build a release inside our container, hence the `mix` commands.
 
 ```
 # Dockerfile
@@ -80,18 +68,23 @@ FROM trenpixster/elixir
 
 ENV VERSION 0.0.1
 ENV APP_HOST 8080
+ENV MIX_ENV prod
 EXPOSE $APP_HOST
 
 RUN mkdir /app
-WORKDIR /app
-COPY ./rel/gaetest/releases/$VERSION/gaetest.tar.gz /app/gaetest.tar.gz
-RUN tar -zxvf gaetest.tar.gz
+COPY . /app/
 
-WORKDIR /app/releases/$VERSION
+WORKDIR /app
+RUN mix do deps.get, compile
+RUN mix phoenix.digest
+RUN mix compile
+RUN mix release
+
+WORKDIR /app/rel/gaetest/releases/$VERSION
 ENTRYPOINT ["./gaetest.sh"]
 CMD ["foreground"]
 ```
 
-You can use other base Docker images that provide Elixir runtime, I chose [trenpixster/elixir](https://hub.docker.com/r/trenpixster/elixir/) for this example but it should run just the same. Notice that I also use the app's version number as a directory namespace. You can mount a Docker volume in `/app` so you can run different versions easily - but that's outside GAE context though.
+You can use other base Docker images that provide Elixir runtime, I chose [trenpixster/elixir](https://hub.docker.com/r/trenpixster/elixir/) for this example but it should run just the same.
 
-Last step is deploying to GAE. If you haven't created a GCP project yet, you need to [create one](https://console.cloud.google.com/) and get the project ID. *You need to have billing enabled in your GCP project to use Flexible Environments.* Now run `gcloud preview app deploy --project=PROJECTID --version=VERSION app.yaml` to deploy your Elixir app. `VERSION` is just an arbitrary string. At the end of everything, your app should be available at `http://projectid.appspot.com`. Enjoy!
+Last step is deploying to GAE. If you haven't created a GCP project yet, you need to [create one](https://console.cloud.google.com/) and get the project ID. *You need to have billing enabled in your GCP project to use Flexible Environments.* Now run `gcloud app deploy --project=PROJECTID --version=VERSION app.yaml` to deploy your Elixir app. `VERSION` is just an arbitrary string. At the end of everything, your app should be available at `http://projectid.appspot.com`. Enjoy!
