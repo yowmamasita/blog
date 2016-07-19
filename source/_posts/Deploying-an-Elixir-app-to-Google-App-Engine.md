@@ -4,7 +4,7 @@ date: 2016-07-19 15:04:29
 tags:
 ---
 
-I've been hearing a lot of good things about [Elixir](http://elixir-lang.org/) lately so I thought of trying it out and making it work with [Google App Engine](https://cloud.google.com/appengine/docs/flexible/). This post has nothing about these good things though, but I've been reading and practicing a lot of functional programming lately and I recommend everyone to check it out.
+I've been hearing a lot of good things about [Elixir](http://elixir-lang.org/) lately so I thought of trying it out and making it work with [Google App Engine](https://cloud.google.com/appengine/docs/flexible/). This post has nothing about these good things though; I've been reading and practicing a lot of functional programming lately and I recommend everyone to check it out.
 
 To start, you need to install Elixir. Instructions are described [here](http://elixir-lang.org/install.html) to set it up. I am running Ubuntu 14.04 so I had to do run these commands:
 
@@ -92,6 +92,6 @@ ENTRYPOINT ["./gaetest.sh"]
 CMD ["foreground"]
 ```
 
-You can use other base Docker images that provide Elixir runtime, but I chose [trenpixster/elixir](https://hub.docker.com/r/trenpixster/elixir/) for this example. Notice that I also use the app's version number as a namespace. You can mount a Docker volume in `/app` so you can run different versions easily - but that's outside GAE context though.
+You can use other base Docker images that provide Elixir runtime, I chose [trenpixster/elixir](https://hub.docker.com/r/trenpixster/elixir/) for this example but it should run just the same. Notice that I also use the app's version number as a directory namespace. You can mount a Docker volume in `/app` so you can run different versions easily - but that's outside GAE context though.
 
-Last step is deploying to GAE. If you haven't created a GCP project yet, you need to create one and get the project ID. Now run `gcloud preview app deploy --project=PROJECTID --version=VERSION app.yaml` to deploy your Elixir app. `VERSION` is just an arbitrary string. At the end of everything, your app should be available at `http://projectid.appspot.com`. Enjoy!
+Last step is deploying to GAE. If you haven't created a GCP project yet, you need to [create one](https://console.cloud.google.com/) and get the project ID. *You need to have billing enabled in your GCP project to use Flexible Environments.* Now run `gcloud preview app deploy --project=PROJECTID --version=VERSION app.yaml` to deploy your Elixir app. `VERSION` is just an arbitrary string. At the end of everything, your app should be available at `http://projectid.appspot.com`. Enjoy!
