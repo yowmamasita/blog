@@ -1,109 +1,63 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
+<!DOCTYPE html>
 <html lang="en">
-  <head>
-    <title>Deploying an Elixir app to Google App Engine - Ben Sarmiento</title>
-    <meta content="text/html; charset=unicode" http-equiv="Content-Type">
-    <meta name="description" content="Setting up a Phoenix web app with a custom runtime on GAE Flexible Environment">
-    <meta name="author" content="Ben Adrian C. Sarmiento">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" href="/favicon.png">
-  </head>
-  <body link="#800080" bgcolor="#ffffff" text="#000080" vlink="#ff0000">
-    <b>
-      <p align="center">
-        <font size="6">D</font><font size="4">eploying an </font><font size="6">E</font><font size="4">lixir app to </font><font size="6">G</font><font size="4">oogle </font><font size="6">A</font><font size="4">pp </font><font size="6">E</font><font size="4">ngine</font>
-        <br><font size="2"><a href="https://bensarmiento.com/">Ben Adrian C. Sarmiento</a></font>
-        <br><font size="1">July 19, 2016</font>
-      </p>
-    </b>
-    <hr>
-
-    <center>
-      <table border="0" cellspacing="0" width="90%">
-        <tbody>
-          <tr>
-            <td>
-              <p><font size="2">
-                I've been hearing a lot of good things about <a href="http://elixir-lang.org/" target="_blank">Elixir</a> lately so I thought of trying it out and making it work with <a href="https://cloud.google.com/appengine/docs/flexible/" target="_blank">Google App Engine</a>. This post has nothing about these good things though; I've been reading and practicing a lot of functional programming lately and I recommend everyone to check it out.
-              </font></p>
-
-              <p><font size="2">
-                To start, you need to install Elixir. Instructions are described <a href="http://elixir-lang.org/install.html" target="_blank">here</a> to set it up. I am running Ubuntu 14.04 so I had to do run these commands:
-              </font></p>
-
-              <p><font size="2"><pre>
-wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
+<head>
+  <meta charset="utf-8">
+  <meta name="X-UA-Compatible" content="IE=edge">
+  <title>Deploying an Elixir app to Google App Engine &middot; Blog</title>
+  <meta name="description" content="Deploying an Elixir app to Google App Engine - Ben Sarmiento">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="short icon" href="/ben-sketch-green.png">
+  <link rel="stylesheet" href="/css/apollo.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" type="text/css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="/" class="logo-link"><img src="/ben-sketch-green.png"></a>
+      <ul class="nav nav-list">
+        <li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li>
+        <li class="nav-list-item"><a href="/archives.html" target="_self" class="nav-list-link">ARCHIVE</a></li>
+        <li class="nav-list-item"><a href="https://bensarmiento.com" target="_blank" class="nav-list-link">MOTHERSHIP</a></li>
+      </ul>
+    </header>
+    <section class="container">
+      <div class="post">
+        <article class="post-block">
+          <h1 class="post-title">Deploying an Elixir app to Google App Engine</h1>
+          <div class="post-info">Jul 19, 2016</div>
+          <div class="post-content">
+            <p>I've been hearing a lot of good things about <a href="http://elixir-lang.org/" target="_blank">Elixir</a> lately so I thought of trying it out and making it work with <a href="https://cloud.google.com/appengine/docs/flexible/" target="_blank">Google App Engine</a>. This post has nothing about these good things though; I've been reading and practicing a lot of functional programming lately and I recommend everyone to check it out.</p>
+            <p>To start, you need to install Elixir. Instructions are described <a href="http://elixir-lang.org/install.html" target="_blank">here</a> to set it up. I am running Ubuntu 14.04 so I had to do run these commands:</p>
+<pre><code>wget https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb && sudo dpkg -i erlang-solutions_1.0_all.deb
 sudo apt-get update
 sudo apt-get install esl-erlang
-sudo apt-get install elixir</pre>
-              </font></p>
-
-              <p><font size="2">
-                Next, I am going to use <a href="http://www.phoenixframework.org/" target="_blank">Phoenix</a> to create a basic web app. To use it, you need to install it as well; instructions are <a href="http://www.phoenixframework.org/docs/installation" target="_blank">here</a>.
-              </font></p>
-
-              <p><font size="2"><pre>
-mix local.hex # install Hex package manager
-mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez</pre>
-              </font></p>
-
-              <p><font size="2">
-                Once done, we can start creating Phoenix projects. For our purpose, let's just create a minimal setup.
-              </font></p>
-
-              <p><font size="2">
-                <code>mix phoenix.new gaetest --no-brunch --no-ecto</code>
-              </font></p>
-
-              <p><font size="2">
-                This command will setup a Phoenix project in <b>gaetest</b>. You can run <code>mix phoenix.server</code> inside that directory to run your app. In some cases, you may also need to install <a href="https://nodejs.org/" target="_blank">Node</a>.
-              </font></p>
-
-              <p><font size="2">
-                We have to make some config updates to our Phoenix project so we can run it inside GAE. First, add <a href="https://github.com/bitwalker/exrm" target="_blank">exrm</a> as a dependency. Open <code>mix.exs</code> and add this:
-              </font></p>
-
-              <p><font size="2"><pre>
-defp deps do
+sudo apt-get install elixir</code></pre>
+            <p>Next, I am going to use <a href="http://www.phoenixframework.org/" target="_blank">Phoenix</a> to create a basic web app. To use it, you need to install it as well; instructions are <a href="http://www.phoenixframework.org/docs/installation" target="_blank">here</a>.</p>
+<pre><code>mix local.hex # install Hex package manager
+mix archive.install https://github.com/phoenixframework/archives/raw/master/phoenix_new.ez</code></pre>
+            <p>Once done, we can start creating Phoenix projects. For our purpose, let's just create a minimal setup.</p>
+            <p><code>mix phoenix.new gaetest --no-brunch --no-ecto</code></p>
+            <p>This command will setup a Phoenix project in <strong>gaetest</strong>. You can run <code>mix phoenix.server</code> inside that directory to run your app. In some cases, you may also need to install <a href="https://nodejs.org/" target="_blank">Node</a>.</p>
+            <p>We have to make some config updates to our Phoenix project so we can run it inside GAE. First, add <a href="https://github.com/bitwalker/exrm" target="_blank">exrm</a> as a dependency. Open <code>mix.exs</code> and add this:</p>
+<pre><code>defp deps do
   [{:phoenix, "~> 1.2.0"},
    ...
    {:exrm, "~> 1.0.8"}]
-end</pre>
-              </font></p>
-
-              <p><font size="2">
-                Next, we configure our production release to run as a server in port 8080. To do this, open <code>config/prod.exs</code> and change it like this:
-              </font></p>
-
-              <p><font size="2"><pre>
-config :gaetest, Gaetest.Endpoint,
+end</code></pre>
+            <p>Next, we configure our production release to run as a server in port 8080. To do this, open <code>config/prod.exs</code> and change it like this:</p>
+<pre><code>config :gaetest, Gaetest.Endpoint,
   http: [port: 8080],
   url: [host: "example.com"],
   cache_static_manifest: "priv/static/manifest.json",
-  server: true</pre>
-              </font></p>
-
-              <p><font size="2">
-                Then, onto our GAE setup, we'll be using a <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/" target="_blank">custom runtime</a> as Elixir is not natively supported. We need to install <a href="https://cloud.google.com/sdk/" target="_blank">Cloud SDK</a> and <a href="https://www.docker.com/" target="_blank">Docker</a> for this. Run <code>gcloud init</code> if this is your first time installing Cloud SDK. To make sure everything is ready, run <code>gcloud app --help</code> and <code>docker -v</code>.
-              </font></p>
-
-              <p><font size="2">
-                Inside the <b>gaetest</b> directory, create <em>app.yaml</em> to configure our project to use a custom runtime:
-              </font></p>
-
-              <p><font size="2"><pre>
-# app.yaml
+  server: true</code></pre>
+            <p>Then, onto our GAE setup, we'll be using a <a href="https://cloud.google.com/appengine/docs/flexible/custom-runtimes/" target="_blank">custom runtime</a> as Elixir is not natively supported. We need to install <a href="https://cloud.google.com/sdk/" target="_blank">Cloud SDK</a> and <a href="https://www.docker.com/" target="_blank">Docker</a> for this. Run <code>gcloud init</code> if this is your first time installing Cloud SDK. To make sure everything is ready, run <code>gcloud app --help</code> and <code>docker -v</code>.</p>
+            <p>Inside the <strong>gaetest</strong> directory, create <em>app.yaml</em> to configure our project to use a custom runtime:</p>
+<pre><code># app.yaml
 
 runtime: custom
-vm: true</pre>
-              </font></p>
-
-              <p><font size="2">
-                Next, we'll create a <em>Dockerfile</em> to describe how to run our app inside GAE. We need to build a release inside our container, hence the <code>mix</code> commands.
-              </font></p>
-
-              <p><font size="2"><pre>
-# Dockerfile
+vm: true</code></pre>
+            <p>Next, we'll create a <em>Dockerfile</em> to describe how to run our app inside GAE. We need to build a release inside our container, hence the <code>mix</code> commands.</p>
+<pre><code># Dockerfile
 
 FROM trenpixster/elixir
 
@@ -123,23 +77,21 @@ RUN mix release
 
 WORKDIR /app/rel/gaetest/releases/$VERSION
 ENTRYPOINT ["./gaetest.sh"]
-CMD ["foreground"]</pre>
-              </font></p>
-
-              <p><font size="2">
-                You can use other base Docker images that provide Elixir runtime, I chose <a href="https://hub.docker.com/r/trenpixster/elixir/" target="_blank">trenpixster/elixir</a> for this example but it should run just the same.
-              </font></p>
-
-              <p><font size="2">
-                Last step is deploying to GAE. If you haven't created a GCP project yet, you need to <a href="https://console.cloud.google.com/" target="_blank">create one</a> and get the project ID. <em>You need to have billing enabled in your GCP project to use Flexible Environments.</em> Now run <code>gcloud app deploy --project=PROJECTID --version=VERSION app.yaml</code> to deploy your Elixir app. <code>VERSION</code> is just an arbitrary string. At the end of everything, your app should be available at <code>http://projectid.appspot.com</code>. Enjoy!
-              </font></p>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </center>
-
-    <hr>
-    <p align="center"><font size="2"><a href="/">Back to Blog</a> | <a href="https://bensarmiento.com/">Home</a></font></p>
-  </body>
+CMD ["foreground"]</code></pre>
+            <p>You can use other base Docker images that provide Elixir runtime, I chose <a href="https://hub.docker.com/r/trenpixster/elixir/" target="_blank">trenpixster/elixir</a> for this example but it should run just the same.</p>
+            <p>Last step is deploying to GAE. If you haven't created a GCP project yet, you need to <a href="https://console.cloud.google.com/" target="_blank">create one</a> and get the project ID. <em>You need to have billing enabled in your GCP project to use Flexible Environments.</em> Now run <code>gcloud app deploy --project=PROJECTID --version=VERSION app.yaml</code> to deploy your Elixir app. <code>VERSION</code> is just an arbitrary string. At the end of everything, your app should be available at <code>http://projectid.appspot.com</code>. Enjoy!</p>
+          </div>
+        </article>
+      </div>
+    </section>
+    <footer>
+      <div class="paginator">
+        <a href="/iptv-is-the-answer.html" class="next">NEXT</a>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2016 <a href="https://bensarmiento.com">Ben Sarmiento</a>, unless otherwise noted.</p>
+      </div>
+    </footer>
+  </div>
+</body>
 </html>
