@@ -79,9 +79,7 @@ WORKDIR /app/rel/gaetest/releases/$VERSION
 ENTRYPOINT ["./gaetest.sh"]
 CMD ["foreground"]</code></pre>
             <p>You can use other base Docker images that provide Elixir runtime, I chose <a href="https://hub.docker.com/r/trenpixster/elixir/" target="_blank">trenpixster/elixir</a> for this example but it should run just the same.</p>
-            <p>Last step is deploying to GAE. If you haven't created a GCP project yet, you need to <a href="https://console.cloud.google.com/" target="_blank">create one</a> and get the project ID. <em>You need to have billing enabled in your GCP project to use Flexible Environments.</em> Now run <code>gcloud app deploy --project=PROJECTID --version=VERSION app.yaml</code> to deploy your Elixir app. <code>VERSION</code> is just an arbitrary string. At the end of everything, your app should be available at <code>http://projectid.appspot.com</code>. Enjoy!</p>
-<p>If you're looking for a lightweight remote development setup, I later wrote about <a href="/programming-in-my-gaming-desktop.html">programming on a remote VPS from a Windows gaming desktop</a> using VS Code SSH.</p>
-          </div>
+            <p>Last step is deploying to GAE. If you haven't created a GCP project yet, you need to <a href="https://console.cloud.google.com/" target="_blank">create one</a> and get the project ID. <em>You need to have billing enabled in your GCP project to use Flexible Environments.</em> Now run <code>gcloud app deploy --project=PROJECTID --version=VERSION app.yaml</code> to deploy your Elixir app. <code>VERSION</code> is just an arbitrary string. At the end of everything, your app should be available at <code>http://projectid.appspot.com</code>. Enjoy!</p>          </div>
         </article>
       </div>
     </section>
