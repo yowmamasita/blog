@@ -46,7 +46,7 @@
 <h2 id="context">Context: What Is This Device?</h2>
 <p>The Viwoods AiPaper Reader (model SE08) is a phone-shaped Android 16 e-reader released in November 2025, priced at $279. It has a 6.13-inch E Ink Carta 1300 display at 300 PPI, a MediaTek Helio G99 SoC, 4 GB RAM, 128 GB storage, 4G LTE with a SIM slot, and a dedicated AI button. It weighs 138 grams and is 6.7mm thin.</p>
 <p>Public reviews praise the display quality and portability but note the lack of warm frontlight, no speaker, and only 4 GB RAM. What none of them cover is what's actually happening at the hardware level. That's what this audit is about.</p>
-<p>Everything below was gathered through ADB over WiFi, using <code>su 0</code> for root access, reading kernel interfaces, dumping services, and enumerating I2C buses.</p>
+<p>Everything below was gathered through ADB over WiFi, using <code>su 0</code> for root access, reading kernel interfaces, dumping services, and enumerating I2C buses. If your ADB access is locked after firmware v1.3.4+, see <a href="/viwoods-adb-unlock.html">Bypassing ADB Restrictions on the Viwoods AiPaper Reader</a> first.</p>
 
 <h2 id="root">Getting Root Without Magisk</h2>
 <p>The AiPaper Reader ships as a <code>userdebug</code> build. This is unusual for a consumer device and means <code>su</code> is available out of the box, no bootloader unlock or Magisk required.</p>
@@ -261,7 +261,7 @@ libMEOW_trace.so</code></pre>
     <tr><td>Widevine failure</td><td>DRM plugin present but not provisioned</td><td>No HD streaming from protected services</td></tr>
   </tbody>
 </table>
-<p>The AiPaper Reader is, at its core, a MediaTek Helio G99 phone reference design by Wisky, with the cameras disabled in software, the display pipeline rerouted through a Toshiba EPD bridge to a 548x844 e-ink panel, and Viwoods' Android 16 software stack layered on top. The hardware is significantly more capable than what's exposed to the user, with dormant camera sensors, a pen digitizer IC, voice wakeup DSP, and FM radio all sitting idle on the PCB.</p>
+<p>The AiPaper Reader is, at its core, a MediaTek Helio G99 phone reference design by Wisky, with the cameras disabled in software, the display pipeline rerouted through a Toshiba EPD bridge to a 548x844 e-ink panel, and Viwoods' Android 16 software stack layered on top. The hardware is significantly more capable than what's exposed to the user, with dormant camera sensors, a pen digitizer IC, voice wakeup DSP, and FM radio all sitting idle on the PCB. Repurposing hardware creatively is a recurring interest of mine&mdash;I also built a <a href="/low-cost-computer-for-the-kids.html">low-cost computer for the kids</a> from a Raspberry Pi and a secondhand touchscreen monitor.</p>
 
           </div>
         </article>
