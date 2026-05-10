@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="X-UA-Compatible" content="IE=edge">
+  <title>A free personal file host on your command line &middot; Blog</title>
+  <meta name="description" content="Setting up a personal file hosting solution using IBM Cloud Object Storage and rclone - Ben Sarmiento">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="short icon" href="/ben-sketch-green.png">
+  <link rel="stylesheet" href="/css/apollo.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" type="text/css">
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="/" class="logo-link"><img src="/ben-sketch-green.png"></a>
+      <ul class="nav nav-list">
+        <li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li>
+        <li class="nav-list-item"><a href="/archives.html" target="_self" class="nav-list-link">ARCHIVE</a></li>
+        <li class="nav-list-item"><a href="https://bensarmiento.com" target="_blank" class="nav-list-link">MOTHERSHIP</a></li>
+      </ul>
+    </header>
+    <section class="container">
+      <div class="post">
+        <article class="post-block">
+          <h1 class="post-title">A free personal file host on your command line</h1>
+          <div class="post-info">Feb 2, 2020</div>
+          <div class="post-content">
+
+<p>I wanted a file-sharing method that avoided the bloat of consumer cloud storage services like Google Drive and Dropbox, while also avoiding paid FTP server subscriptions for occasional file sharing.</p>
+
+<h2>The Solution: IBM Cloud COS</h2>
+<p>IBM Cloud Object Storage provides 5GB of public outbound traffic on their free tier without requiring credit card information. I configured a custom domain (<code>files.bensarmiento.com</code>) using a CNAME record pointing to the COS bucket.</p>
+
+<h3>Setup Requirements</h3>
+<ul>
+  <li>IBM COS bucket with service credentials</li>
+  <li><code>rclone</code> installed locally</li>
+  <li>DNS configuration for custom subdomain</li>
+</ul>
+
+<h3>Configuration</h3>
+<p>The rclone configuration file (<code>$HOME/.config/rclone/rclone.conf</code>) includes S3-compatible settings with IBM COS as the provider, including access keys, region, and endpoint information with public-read ACL permissions.</p>
+
+<h3>Command-Line Implementation</h3>
+<p>I created a bash function that uploads files and generates shareable URLs:</p>
+<pre><code>function upload {
+    rclone copy $1 ibm:&lt;bucket-name&gt;
+    a=`basename $1`
+    b=`echo $a | urlenc enc`
+    echo "https://&lt;your configured url&gt;/&lt;bucket-name&gt;/$b"
+}</code></pre>
+
+<h3>Bonus Feature</h3>
+<p>A redirect function creates simple HTML redirects, enabling lightweight URL shortening capabilities.</p>
+
+          </div>
+        </article>
+      </div>
+    </section>
+    <footer>
+      <div class="paginator">
+        <a href="/an-idea-for-an-ultra-low-cost-online-learning-computer.html" class="prev">PREV</a>
+        <a href="/programming-in-my-gaming-desktop.html" class="next">NEXT</a>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2020 <a href="https://bensarmiento.com">Ben Sarmiento</a>, unless otherwise noted.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
