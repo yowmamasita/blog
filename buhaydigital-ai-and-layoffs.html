@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="X-UA-Compatible" content="IE=edge">
+  <title>What a year of r/buhaydigital says about AI and layoffs &middot; Blog</title>
+  <meta name="description" content="I pulled every r/buhaydigital post from the last 12 months and had an LLM label each one. Posts about AI more than doubled, and posts about losing a job to it went from a handful to one a day. - Ben Sarmiento">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="short icon" href="/ben-sketch-green.png">
+  <link rel="stylesheet" href="/css/apollo.css">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600" type="text/css">
+  <style>
+    .post-content figure { margin: 1.5em 0; }
+    .post-content figure img { margin: 0 auto; }
+    .post-content figcaption { font-size: 13px; color: #7f8c8d; text-align: center; margin-top: 6px; }
+    .post-content td.n, .post-content th.n { text-align: right; white-space: nowrap; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <header>
+      <a href="/" class="logo-link"><img src="/ben-sketch-green.png"></a>
+      <ul class="nav nav-list">
+        <li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li>
+        <li class="nav-list-item"><a href="/archives.html" target="_self" class="nav-list-link">ARCHIVE</a></li>
+        <li class="nav-list-item"><a href="https://bensarmiento.com" target="_blank" class="nav-list-link">MOTHERSHIP</a></li>
+      </ul>
+    </header>
+    <section class="container">
+      <div class="post">
+        <article class="post-block">
+          <h1 class="post-title">What a year of r/buhaydigital says about AI and layoffs</h1>
+          <div class="post-info">Nov 12, 2026</div>
+          <div class="post-content">
+
+<p><a href="https://www.reddit.com/r/buhaydigital/">r/buhaydigital</a> is where Filipino VAs, freelancers and remote workers talk about work: clients, rates, agencies, taxes, and lately, AI. Scrolling it, it felt like every other post was either "how do I learn AI automation" or "I just got replaced by AI". I wanted to know if that was real or just my feed, so I pulled every post from the last 12 months and counted.</p>
+
+<nav class="toc">
+  <h2>Table of Contents</h2>
+  <ol>
+    <li><a href="#tldr">TL;DR</a></li>
+    <li><a href="#data">Getting a year of posts</a></li>
+    <li><a href="#labels">Labelling 25,000 posts</a></li>
+    <li><a href="#ai">AI posts more than doubled</a></li>
+    <li><a href="#jobloss">Job-loss posts were flat, until September</a></li>
+    <li><a href="#both">When the two meet</a></li>
+    <li><a href="#caveats">What this does not say</a></li>
+  </ol>
+</nav>
+
+<h2 id="tldr">TL;DR</h2>
+<ul>
+  <li>Posts that are about AI, or mention it, went from <strong>4.5%</strong> of the subreddit to <strong>11.8%</strong> (4-week average, Nov 2025 vs. Nov 2026).</li>
+  <li>Posts from people who lost a job or a client sat at 4 to 5.5% for most of the year, then climbed to <strong>7.2%</strong> from September on.</li>
+  <li>Posts that tie the two together, AI and losing work, went from <strong>6 in December 2025 to 31 in October 2026</strong>. The first 12 days of November already had 32.</li>
+</ul>
+
+<table>
+  <thead><tr><th>Month</th><th class="n">Posts</th><th class="n">About or mentions AI</th><th class="n">Lost a job or client</th><th class="n">Both</th></tr></thead>
+  <tbody>
+    <tr><td>Dec 2025</td><td class="n">1,561</td><td class="n">4.5%</td><td class="n">4.4%</td><td class="n">6</td></tr>
+    <tr><td>Feb 2026</td><td class="n">1,802</td><td class="n">8.2%</td><td class="n">5.3%</td><td class="n">21</td></tr>
+    <tr><td>Apr 2026</td><td class="n">2,065</td><td class="n">7.7%</td><td class="n">5.1%</td><td class="n">20</td></tr>
+    <tr><td>Jul 2026</td><td class="n">2,066</td><td class="n">8.0%</td><td class="n">4.3%</td><td class="n">26</td></tr>
+    <tr><td>Sep 2026</td><td class="n">1,614</td><td class="n">8.8%</td><td class="n">5.4%</td><td class="n">18</td></tr>
+    <tr><td>Oct 2026</td><td class="n">1,525</td><td class="n">10.4%</td><td class="n">6.7%</td><td class="n">31</td></tr>
+    <tr><td>Nov 1-12, 2026</td><td class="n">517</td><td class="n">14.7%</td><td class="n">9.9%</td><td class="n">32</td></tr>
+  </tbody>
+</table>
+
+<h2 id="data">Getting a year of posts</h2>
+<p>The obvious approach is to open <code>/r/buhaydigital/new/</code> and keep scrolling. That works, and every post element on the page carries everything you would want as attributes: title, author, timestamp, score, comment count, flair. But Reddit stops serving any listing at about 1,000 posts. On this subreddit that is only one month. Sorting by top or hot does not help, every listing has the same cap.</p>
+<p>For the rest of the year I used <a href="https://arctic-shift.photon-reddit.com/">Arctic Shift</a>, a public Reddit archive with a search API that takes a subreddit and a date range. A few things I learned using it:</p>
+<ul>
+  <li>It returns 100 posts per call, so you page by date (<code>sort=asc</code>, then <code>after=</code> the last post's <code>created_utc</code>). A year was about 250 calls.</li>
+  <li>If you page too fast it answers <code>{"error":"Timeout. Maybe slow down a bit"}</code>. A 1.5 second pause between calls was enough.</li>
+  <li>It rejects Python's default User-Agent with a 403.</li>
+  <li>It saves each post twice, once within a minute of posting and again about a week later, so the upvote counts are a week old. I compared one month against live Reddit: 84% of scores matched exactly and the total was about 5% low.</li>
+  <li>It keeps posts that were later removed or deleted. For the same month it had all 999 posts Reddit showed me, plus 512 more: 186 removed by mods or the spam filter, and about 320 deleted by their authors.</li>
+</ul>
+<p>That gave me <strong>25,315 posts</strong> from Nov 12, 2025 to Nov 12, 2026. I dropped the 3,465 that mods or Reddit's spam filter removed, since those are mostly spam (a lot of it AI tool promos, which would have padded the AI numbers). Posts deleted by their own authors stay in, they were real posts. That leaves <strong>21,850</strong>.</p>
+
+<h2 id="labels">Labelling 25,000 posts</h2>
+<p>Keyword search does not work well here. Posts are in Taglish, "ai" is a common word in Tagalog, and people write "na-layoff", "natanggal", "binitawan ako ni client" or "pinalitan na kami". So I had an LLM classifier answer two multiple-choice questions for every post, given the title, flair and the first 1,200 characters of the body:</p>
+<table>
+  <thead><tr><th>Question</th><th>Choices</th></tr></thead>
+  <tbody>
+    <tr><td>Is this post about AI?</td><td>AI is the main topic / AI is mentioned in passing / no AI</td></tr>
+    <tr><td>Is this post about losing a job or client?</td><td>Lost a job or client (laid off, fired, contract ended, replaced) / worried about losing one / neither</td></tr>
+  </tbody>
+</table>
+<p>All 25k posts came to about 17 million input tokens and cost <strong>$0.73</strong>. It took under a minute with 6 parallel workers.</p>
+<p>Before running everything I checked 150 random posts by hand. The AI labels held up and it did not miss a single AI post. The job-loss labels were weaker: about 1 in 8 "lost a job or worried" labels were wrong, mostly on the "worried" side (it flagged a VA asking whether immigration would offload them at the airport). So treat the numbers below as estimates. The trends are what matter, and the same classifier labelled every month the same way.</p>
+
+<h2 id="ai">AI posts more than doubled</h2>
+<figure>
+  <img src="/img/buhaydigital-ai-and-layoffs/weekly-ai-share.svg" alt="Line chart: share of r/buhaydigital posts about or mentioning AI, weekly, rising from 4.5% in late 2025 to 11.8% in early November 2026">
+  <figcaption>Share of posts that are about AI or mention it. Thick line is a 4-week average.</figcaption>
+</figure>
+<p>In late 2025 about 1 in 22 posts touched on AI. By November 2026 it is about 1 in 8. The first jump came in January and February, then it held around 7 to 8% through the middle of the year, and started climbing again in September.</p>
+<p>A little under half of these (762 of 1,610) have AI as the main topic: learning AI automation, AI annotation and training gigs, tools clients now expect, and being replaced. The rest mention it in passing.</p>
+
+<h2 id="jobloss">Job-loss posts were flat, until September</h2>
+<figure>
+  <img src="/img/buhaydigital-ai-and-layoffs/weekly-layoff-share.svg" alt="Line chart: share of posts from people who lost a job or client, weekly, around 4 to 5% for most of the year and rising to 7.2% from September 2026">
+  <figcaption>Share of posts from people who lost a job or client. Thick line is a 4-week average.</figcaption>
+</figure>
+<p>For most of the year, 4 to 5% of posts were someone saying they got laid off, lost a client or had a contract ended. There is a bump in March and April, then it drifts down over the summer. From September it climbs, and the last four weeks are the highest of the year.</p>
+<figure>
+  <img src="/img/buhaydigital-ai-and-layoffs/monthly-ai-vs-layoff.svg" alt="Line chart comparing monthly share of AI posts and job-loss posts; both rise from September 2026">
+  <figcaption>Month by month. November 2025 and November 2026 are part months.</figcaption>
+</figure>
+<p>Side by side, the two lines move separately for most of the year and then rise together from September.</p>
+
+<h2 id="both">When the two meet</h2>
+<figure>
+  <img src="/img/buhaydigital-ai-and-layoffs/monthly-ai-job-loss-posts.svg" alt="Bar chart of posts per month tying AI to job loss or the fear of it, from 6 in December 2025 to 31 in October 2026">
+  <figcaption>Posts labelled both AI-related and about losing a job or fearing it.</figcaption>
+</figure>
+<p>This is the number I was really after: posts where AI and losing work show up together. It went from a handful in late 2025 to about one a day now. Some of the most upvoted ones:</p>
+<ul>
+  <li><a href="https://www.reddit.com/r/buhaydigital/comments/1tnqy8p/i_finally_got_replaced_by_ai/">I finally got replaced by AI.</a> (May, 759 upvotes). A copywriter for a California SEO agency. The team first used AI for keyword research, then to draft content they would "make sound human", then the tasks dried up.</li>
+  <li><a href="https://www.reddit.com/r/buhaydigital/comments/1u8r3t7/replaced_by_ai_lolhahahahahahaha/">Replaced by AI lolhahahahahahaha</a> (June, 483 upvotes). A digital marketer let go to "cut costs", whose client then switched to ChatGPT posts and graphics for the community the poster had built.</li>
+  <li><a href="https://www.reddit.com/r/buhaydigital/comments/1xsh4kj/nakakalungkot_na_good_morning_message/">nakakalungkot na good morning message</a> (Nov 10, 763 upvotes). The whole team woke up to a message that they had been replaced by AI.</li>
+  <li><a href="https://www.reddit.com/r/buhaydigital/comments/1wcl4nd/my_boss_thought_ai_could_replace_my_role/">My boss thought AI could replace my role.</a> (September, 2,835 upvotes, the most upvoted of all of them). A client decided the role was redundant "since we're using AI a lot". Two weeks into the turnover the team started complaining, and the client asked the poster to stay.</li>
+</ul>
+<p>That last one is a good reminder that "replaced by AI" is sometimes the plan more than the result.</p>
+
+<h2 id="caveats">What this does not say</h2>
+<ul>
+  <li><strong>It counts posts, not workers.</strong> People post when something goes wrong, so this is a measure of what the community talks about, not an unemployment rate.</li>
+  <li><strong>The labels are an LLM's.</strong> Good enough for trends, not for exact counts. The "worried about losing a job" label is the noisiest.</li>
+  <li><strong>November 2026 is only 12 days</strong>, and its newest posts may not have been through moderation yet. The share is real, but I would wait for the full month before reading much into it.</li>
+  <li>Not every job-loss post is about AI. Most are not. US funding cuts, clients closing shop and declining niches like eBay dropshipping come up too.</li>
+</ul>
+<p>Still, over 12 months, AI went from a side topic to one of the main things this community talks about, and posts about losing work to it went from rare to daily.</p>
+
+          </div>
+        </article>
+      </div>
+    </section>
+    <footer>
+      <div class="paginator">
+        <a href="/viwoods-adb-unlock.html" class="next">NEXT</a>
+      </div>
+      <div class="copyright">
+        <p>&copy; 2026 <a href="https://bensarmiento.com">Ben Sarmiento</a>, unless otherwise noted.</p>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
